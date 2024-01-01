@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserAccountEnum;
 use App\Models\UserAccount;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -46,6 +47,15 @@ class UserFactory extends Factory
         return $this->has(UserAccount::factory()
             ->state([
                 'account_role' => 'bus-operator',
+                'is_verified' => true
+            ]));
+    }
+
+    public function driver()
+    {
+        return $this->has(UserAccount::factory()
+            ->state([
+                'account_role' => UserAccountEnum::DRIVER->value,
                 'is_verified' => true
             ]));
     }

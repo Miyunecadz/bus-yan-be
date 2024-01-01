@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BusController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\JobController;
+use App\Http\Controllers\OrganizationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,4 +25,45 @@ Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::post('/login', 'loginWithCredentials');
     Route::get('/me', 'me')->middleware('valid.token');
     Route::post('/logout', 'logout')->middleware('valid.token');
+});
+
+
+Route::middleware('valid.token')->group(function () {
+    Route::middleware('verify.busyan:bus-operator')->group(function () {
+        Route::controller(BusController::class)->prefix('buses')->group(function () {
+            Route::get('/', 'index');
+            Route::get('/{id}', 'show');
+            Route::post('/', 'store');
+            Route::put('/{id}', 'update');
+            Route::delete('/{id}', 'destroy');
+        });
+
+        Route::controller(EmployeeController::class)->prefix('employees')->group(function () {
+            Route::get('/', 'index');
+            Route::get('/{id}', 'show');
+            Route::post('/', 'store');
+            Route::put('/{id}', 'update');
+            Route::delete('/{id}', 'destroy');
+        });
+    });
+
+    Route::controller(JobController::class)->prefix('jobs')->group(function () {
+        Route::get('/', 'index');
+        Route::get('/{id}', 'show');
+        Route::middleware('verify.busyan:bus-operator')->group(function () {
+            Route::post('/', 'store');
+            Route::put('/{id}', 'update');
+            Route::delete('/{id}', 'destroy');
+        });
+    });
+
+    Route::controller(OrganizationController::class)->prefix('organizations')->group(function () {
+        Route::post('/', 'store');
+        Route::middleware('verify.busyan:admin')->group(function () {
+            Route::get('/', 'index');
+            Route::get('/{id}', 'show');
+            Route::put('/{id}', 'update');
+            Route::delete('/{id}', 'destroy');
+        });
+    });
 });

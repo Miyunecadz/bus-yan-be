@@ -17,7 +17,8 @@ class JobController extends Controller
     public function index()
     {
         $organization = Organization::findByToken(request()->bearerToken());
-        $jobs = Job::where('organization_id', $organization->id)->get();
+        $jobs = Job::when($organization, fn ($query) => $query->where('organization_id', $organization->id))
+            ->with('organization')->get();
 
         return $this->responseSuccessJson('SUCCESSFULLY_RETRIEVED', $jobs);
     }

@@ -7,16 +7,16 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class VerifyIfBusOperator
+class VerifyIfBusYanUser
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, string $role): Response
     {
-        if (!TokenGenerator::validateTokenBasedOnRole(request()->bearerToken(), 'bus-operator')) {
+        if (!TokenGenerator::validateTokenBasedOnRole(request()->bearerToken(), $role)) {
             abort(403);
         }
 

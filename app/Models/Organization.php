@@ -35,6 +35,9 @@ class Organization extends Model
 
     public static function findByToken($token)
     {
+        if (!$token) {
+            return null;
+        }
         $decryptedToken = Crypt::decrypt($token);
         $data = explode('-', $decryptedToken);
 

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('company_name');
             $table->string('company_address');
             $table->text('company_description');
+            $table->string('company_image')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
