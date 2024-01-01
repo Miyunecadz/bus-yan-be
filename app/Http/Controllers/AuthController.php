@@ -20,8 +20,8 @@ class AuthController extends Controller
 
         $user = auth()->user();
 
-        if ($user->userAccount->account_role !== $request->role) {
-            return $this->responseErrorJson('INVALID_CREDENTIALS', [], 401);
+        if (!$user->userAccount->is_verified) {
+            return $this->responseErrorJson('ACCOUNT_NOT_VERIFIED', [], 401);
         }
 
         $token = TokenGenerator::generate($user);
