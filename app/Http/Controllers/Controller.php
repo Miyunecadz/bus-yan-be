@@ -22,7 +22,7 @@ class Controller extends BaseController
     protected function responseErrorJson($message, $errors = [], $statusCode = 422)
     {
         return response()->json([
-            'success' => true,
+            'success' => false,
             'message' => $message,
             'errors' => $errors
         ], $statusCode);

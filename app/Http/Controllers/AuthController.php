@@ -11,7 +11,7 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-    public function loginWithCredentials(LoginCredentialRequest $request)
+    public function loginWithCredentials(Request $request)
     {
         $credentials = $request->only(['email', 'password']);
         if (!Auth::attempt($credentials)) {
@@ -20,7 +20,13 @@ class AuthController extends Controller
 
         $user = auth()->user();
 
+        if ($user->userAccount->account_role !== $request->role) {
+            auth()->logout();
+            return $this->responseErrorJson('INVALID_CREDENTIALS', [], 401);
+        }
+
         if (!$user->userAccount->is_verified) {
+            auth()->logout();
             return $this->responseErrorJson('ACCOUNT_NOT_VERIFIED', [], 401);
         }
 

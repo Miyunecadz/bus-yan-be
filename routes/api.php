@@ -21,6 +21,10 @@ use Illuminate\Support\Facades\Route;
 
 
 
+Route::get('/health', function () {
+    return response()->json(['success' => true]);
+});
+
 Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::post('/login', 'loginWithCredentials');
     Route::get('/me', 'me')->middleware('valid.token');
