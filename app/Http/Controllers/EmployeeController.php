@@ -48,7 +48,7 @@ class EmployeeController extends Controller
 
         $employee = Employee::create([
             'organization_id' => $organization->id,
-            'employee_id' => $user ? $user->id : null,
+            'employee_id' => isset($user) ? $user->id : null,
             ...$request->only([
                 'id_number',
                 'full_name',
@@ -82,7 +82,25 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $organization = Organization::findByToken(request()->bearerToken());
+        $employee = Employee::where('organization_id', $organization->id)->find($id);
+
+        if (!$employee) {
+            return $this->responseErrorJson('NOT_FOUND', [], 404);
+        }
+
+        $employee->update([
+            ...$request->only([
+                'id_number',
+                'full_name',
+                'email',
+                'contact_number',
+                'profile_url',
+                'employee_type',
+            ])
+        ]);
+
+        return $this->responseSuccessJson('SUCCESSFULLY_UPDATED', $employee);
     }
 
     /**
@@ -90,6 +108,19 @@ class EmployeeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $organization = Organization::findByToken(request()->bearerToken());
+        $employee = Employee::where('organization_id', $organization->id)->find($id);
+
+        if (!$employee) {
+            return $this->responseErrorJson('NOT_FOUND', [], 404);
+        }
+
+        if ($employee->employee_id) {
+            $employee->user->delete();
+        }
+
+        $employee->delete();
+
+        return $this->responseSuccessJson('DELETE_SUCCESS', []);
     }
 }
