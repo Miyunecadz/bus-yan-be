@@ -5,11 +5,14 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Enums\UserAccountEnum;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Notifications\Notifiable;
+use App\Models\Employee;
+use App\Models\Organization;
+use App\Models\UserAccount;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Crypt;
 
 class User extends Authenticatable
 {
@@ -47,10 +50,22 @@ class User extends Authenticatable
         return $this->hasOne(Employee::class, 'employee_id');
     }
 
+    public function applications()
+    {
+        return $this->hasMany(Application::class, 'user_id');
+    }
+
     public function scopeBusOperator($query)
     {
         $query->whereHas('userAccount', function ($subQuery) {
             $subQuery->where('account_role', UserAccountEnum::BUS_OPERATOR->value);
+        });
+    }
+
+    public function scopeJobseeker($query)
+    {
+        $query->whereHas('userAccount', function ($subQuery) {
+            $subQuery->where('account_role', UserAccountEnum::JOBSEEKER->value);
         });
     }
 
@@ -60,6 +75,17 @@ class User extends Authenticatable
         $data = explode('-', $decryptedToken);
 
         return self::find($data[0]);
+    }
+
+    public static function getUserByRoleToken($role, $token)
+    {
+        $decryptedToken = Crypt::decrypt($token);
+        $data = explode('-', $decryptedToken);
+
+        return self::whereHas('userAccount', function ($subQuery) use ($role) {
+            $subQuery->where('account_role', $role);
+        })
+        ->find($data[0]);
     }
 
     public static function getOrganizationByToken($token)
