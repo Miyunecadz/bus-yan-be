@@ -26,9 +26,13 @@ class DatabaseSeeder extends Seeder
             'phone_number' => fake()->unique()->phoneNumber(),
             'display_name' => 'System Admin',
         ]);
-
+        
         $this->createBusOperator();
         $this->createJobSeeker();
+
+        $this->call([
+            ApplicationSeeder::class,
+        ]);
     }
 
     private function createBusOperator()
@@ -63,7 +67,7 @@ class DatabaseSeeder extends Seeder
         $user = User::factory()->driver()->create();
 
         Employee::factory()->create([
-            'employee_type' => EmployeeStatusEnum::ASSISTANT_MANAGER,
+            'employee_type' => EmployeeStatusEnum::BUS_DRIVER,
             'employee_id' => $user->id,
             'organization_id' => $organizationId
         ]);
