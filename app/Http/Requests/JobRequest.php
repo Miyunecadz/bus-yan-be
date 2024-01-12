@@ -23,13 +23,13 @@ class JobRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string'],
-            'company_name' => ['required', 'string'],
-            'company_address' => ['required', 'string'],
+            'company_name' => ['string'],
+            'company_address' => ['string'],
             'salary' => ['required', 'string'],
             'job_highlights' => ['required', 'string'],
             'qualifications' => ['required', 'string'],
             'how_to_apply' => ['required', 'string'],
-            'about_the_company' => ['required', 'string'],
+            'about_the_company' => ['string'],
             'image_url' => ['nullable', 'string'],
             'questions' => ['nullable', 'array'],
             'questions.*.description' => ['required', 'string']

@@ -33,15 +33,15 @@ class JobController extends Controller
         $job = Job::create(
             [
                 'organization_id' => $organization->id,
+                'company_name' => $request->company_name ?? $organization->company_name,
+                'company_address' => $request->company_address ?? $organization->company_address,
+                'about_the_company' => $request->about_the_company ?? $organization->about_the_company,
                 ...$request->only([
                     'title',
-                    'company_name',
-                    'company_address',
                     'salary',
                     'job_highlights',
                     'qualifications',
                     'how_to_apply',
-                    'about_the_company',
                     'image_url',
                 ])
             ]

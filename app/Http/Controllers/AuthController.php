@@ -20,7 +20,7 @@ class AuthController extends Controller
 
         $user = auth()->user();
 
-        if ($user->userAccount->account_role !== $request->role) {
+        if (!in_array($user->userAccount->account_role, is_array($request->role) ? $request->role : [$request->role])) {
             auth()->logout();
             return $this->responseErrorJson('INVALID_CREDENTIALS', [], 401);
         }
