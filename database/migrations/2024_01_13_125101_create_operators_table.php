@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('operators', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('organization_id');
-            $talbe->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->softDeletes();
         });
