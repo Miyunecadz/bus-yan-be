@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\OrganizationRequest;
 use App\Models\User;
 use App\Models\UserAccount;
+use Illuminate\Support\Facades\DB;
 
 class OrganizationController extends Controller
 {
@@ -101,10 +102,14 @@ class OrganizationController extends Controller
         if (!$organization) {
             return $this->responseErrorJson('NOT_FOUND', [], 404);
         }
-
-        $organization->user->userAccount()->delete();
-        $organization->user()->delete();
-        $organization->delete();
+        DB::beginTransaction();
+        try {
+            $organization->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->responseErrorJson('INTERNAL_SERVER_ERROR');
+        }
 
         return $this->responseSuccessJson('SUCCESSFULLY_DELETED');
     }

@@ -6,7 +6,6 @@ use App\Models\Application;
 use App\Models\Job;
 use App\Models\Organization;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 
@@ -17,10 +16,11 @@ class ApplicationSeeder extends Seeder
      */
     public function run(): void
     {
-        $operator = User::factory()
+        User::factory()
             ->busOperator()
             ->has(
                 Organization::factory()
+                ->hasEmployees(2)
                 ->hasBuses(5)
                 ->has(
                     Job::factory(4)

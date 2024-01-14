@@ -37,7 +37,7 @@ class UserFactory extends Factory
     {
         return $this->has(UserAccount::factory()
             ->state([
-                'account_role' => 'admin',
+                'account_role' => UserAccountEnum::ADMIN->value,
                 'is_verified' => true
             ]));
     }
@@ -46,7 +46,7 @@ class UserFactory extends Factory
     {
         return $this->has(UserAccount::factory()
             ->state([
-                'account_role' => 'bus-operator',
+                'account_role' => UserAccountEnum::BUS_OPERATOR->value,
                 'is_verified' => true
             ]));
     }
@@ -64,7 +64,16 @@ class UserFactory extends Factory
     {
         return $this->has(UserAccount::factory()
             ->state([
-                'account_role' => 'jobseeker',
+                'account_role' => UserAccountEnum::JOBSEEKER->value,
+                'is_verified' => true
+            ]));
+    }
+
+    public function busCooperative()
+    {
+        return $this->has(UserAccount::factory()
+            ->state([
+                'account_role' => UserAccountEnum::BUS_COOPERATIVE->value,
                 'is_verified' => true
             ]));
     }

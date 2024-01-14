@@ -8,6 +8,7 @@ use App\Enums\UserAccountEnum;
 use App\Models\Employee;
 use App\Models\Organization;
 use App\Models\UserAccount;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -16,7 +17,9 @@ use Illuminate\Support\Facades\Crypt;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, CascadeSoftDeletes;
+
+    protected $cascadeDeletes = ['userAccount', 'employee', 'applications'];
 
     /**
      * The attributes that are mass assignable.
@@ -74,6 +77,13 @@ class User extends Authenticatable
         });
     }
 
+    public function scopeBusCooperative($query)
+    {
+        $query->whereHas('userAccount', function ($subQuery) {
+            $subQuery->where('account_role', UserAccountEnum::BUS_COOPERATIVE->value);
+        });
+    }
+
     public static function getUserByToken($token)
     {
         $decryptedToken = Crypt::decrypt($token);
@@ -113,5 +123,10 @@ class User extends Authenticatable
     public function isBusOperator()
     {
         return $this->userAccount->account_role == UserAccountEnum::BUS_OPERATOR->value;
+    }
+
+    public function isBusCooperative()
+    {
+        return $this->userAccount->account_role == UserAccountEnum::BUS_COOPERATIVE->value;
     }
 }
