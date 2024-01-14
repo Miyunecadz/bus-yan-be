@@ -18,7 +18,7 @@ class OrganizationFactory extends Factory
     public function definition(): array
     {
         return [
-            'owner_user_id' => User::factory()->busOperator(),
+            'owner_user_id' => User::factory()->busCooperative(),
             'company_name' => fake()->company(),
             'company_address' => fake()->address(),
             'company_description' => fake()->text(),
