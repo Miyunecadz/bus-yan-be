@@ -55,6 +55,11 @@ class User extends Authenticatable
         return $this->hasMany(Application::class, 'user_id');
     }
 
+    public function operator()
+    {
+        return $this->hasOne(Operator::class, 'user_id');
+    }
+
     public function scopeBusOperator($query)
     {
         $query->whereHas('userAccount', function ($subQuery) {
@@ -85,7 +90,7 @@ class User extends Authenticatable
         return self::whereHas('userAccount', function ($subQuery) use ($role) {
             $subQuery->where('account_role', $role);
         })
-        ->find($data[0]);
+            ->find($data[0]);
     }
 
     public static function getOrganizationByToken($token)

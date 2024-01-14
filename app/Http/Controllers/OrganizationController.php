@@ -43,7 +43,7 @@ class OrganizationController extends Controller
 
         UserAccount::create([
             'user_id' => $user->id,
-            'account_role' => UserAccountEnum::BUS_OPERATOR,
+            'account_role' => UserAccountEnum::BUS_COOPERATIVE,
             'is_verified' => auth()->user()->isAdmin() ? true : false
         ]);
 
