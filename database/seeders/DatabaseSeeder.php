@@ -27,11 +27,12 @@ class DatabaseSeeder extends Seeder
             'display_name' => 'System Admin',
         ]);
         
-        $this->createBusOperator();
-        $this->createJobSeeker();
+        // $this->createBusOperator();
+        // $this->createJobSeeker();
 
         $this->call([
             ApplicationSeeder::class,
+            UserSeeder::class,
         ]);
     }
 

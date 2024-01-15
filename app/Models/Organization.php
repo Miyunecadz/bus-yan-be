@@ -12,7 +12,7 @@ class Organization extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
-    protected $cascadeDeletes = ['user', 'employees', 'buses', 'jobs'];
+    protected $cascadeDeletes = ['user', 'employees', 'buses', 'jobs', 'operators'];
 
     protected $guarded = [];
 
@@ -23,7 +23,7 @@ class Organization extends Model
 
     public function employees()
     {
-        return $this->hasMany(Employee::class);
+        return $this->hasMany(Employee::class, 'organization_id');
     }
 
     public function buses()
@@ -34,6 +34,11 @@ class Organization extends Model
     public function jobs()
     {
         return $this->hasMany(Job::class);
+    }
+
+    public function operators()
+    {
+        return $this->hasMany(Operator::class);
     }
 
     public static function findByToken($token)

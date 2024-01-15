@@ -26,4 +26,9 @@ class Employee extends Model
     {
         return $this->hasMany(BusSchedule::class, 'driver_id');
     }
+
+    public function operator()
+    {
+        return $this->belongsTo(Operator::class, 'operator_id');
+    }
 }

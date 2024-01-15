@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\EmployeeStatusEnum;
+use App\Models\Operator;
 use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -23,6 +24,7 @@ class EmployeeFactory extends Factory
         return [
             'organization_id' => Organization::factory(),
             'employee_id' => User::factory(),
+            'operator_id' => Operator::factory(),
             'id_number' => rand(1000, 9999),
             'full_name' => fake()->name(),
             'email' => fake()->email(),

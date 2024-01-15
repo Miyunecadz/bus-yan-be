@@ -17,7 +17,7 @@ class ApplicationSeeder extends Seeder
     public function run(): void
     {
         User::factory()
-            ->busOperator()
+            ->busCooperative()
             ->has(
                 Organization::factory()
                 ->hasEmployees(2)
