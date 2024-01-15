@@ -19,7 +19,9 @@ class BusScheduleController extends Controller
     public function index()
     {
         $organization = Organization::findByToken(request()->bearerToken());
-        $busSchedules = BusSchedule::where('organization_id', $organization->id)->with(['bus', 'driver'])->get();
+        $busSchedules = BusSchedule::whereHas('bus', function ($query) use ($organization) {
+            $query->where('organization_id', $organization->id);
+        })->with(['bus', 'driver.user'])->get();
         return $this->responseSuccessJson('SUCCESSFULLY_RETRIEVED', $busSchedules);
     }
 
@@ -76,7 +78,7 @@ class BusScheduleController extends Controller
         return $this->responseSuccessJson('SUCCESSFULLY_CREATED', $busSchedule->load(['bus', 'driver']), 201);
     }
 
-    public function delete(string $id)
+    public function destroy(string $id)
     {
         $busSchedule = BusSchedule::find($id);
 

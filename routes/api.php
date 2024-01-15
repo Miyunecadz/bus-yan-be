@@ -95,6 +95,8 @@ Route::middleware('valid.token')->group(function () {
     });
 
     Route::controller(BusScheduleController::class)->prefix('bus-schedules')->group(function () {
+        Route::get('/', 'index');
         Route::post('/', 'store');
+        Route::delete('/{id}', 'destroy');
     });
 });

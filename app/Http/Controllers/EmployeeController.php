@@ -19,7 +19,7 @@ class EmployeeController extends Controller
     public function index()
     {
         $organization = Organization::findByToken(request()->bearerToken());
-        $employees = Employee::where('organization_id', $organization->id)->get();
+        $employees = Employee::where('organization_id', $organization->id)->when(request()->type, fn ($query) => $query->where('employee_type', request()->type))->get();
 
         return $this->responseSuccessJson('SUCCESSFULLY_RETRIEVED', $employees);
     }
