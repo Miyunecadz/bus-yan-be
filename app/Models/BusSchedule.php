@@ -11,4 +11,19 @@ class BusSchedule extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
+
+    public function bus()
+    {
+        return $this->belongsTo(Bus::class);
+    }
+
+    public function driver()
+    {
+        return $this->belongsTo(Employee::class, 'driver_id');
+    }
+
+    public function conductor()
+    {
+        return $this->belongsTo(Employee::class, 'conductor_id');
+    }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BusController;
+use App\Http\Controllers\BusScheduleController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\OperatorController;
@@ -56,11 +57,11 @@ Route::middleware('valid.token')->group(function () {
     Route::controller(JobController::class)->prefix('jobs')->group(function () {
         Route::get('/', 'index');
         Route::get('/{id}', 'show');
-        Route::middleware('verify.busyan:bus-operator')->group(function () {
-            Route::post('/', 'store');
-            Route::put('/{id}', 'update');
-            Route::delete('/{id}', 'destroy');
-        });
+        // Route::middleware('verify.busyan:bus-operator')->group(function () {
+        Route::post('/', 'store');
+        Route::put('/{id}', 'update');
+        Route::delete('/{id}', 'destroy');
+        // });
     });
 
     Route::controller(ApplicationController::class)->prefix('applications')->group(function () {
@@ -91,5 +92,9 @@ Route::middleware('valid.token')->group(function () {
             Route::put('/{id}', 'update');
             Route::delete('/{id}', 'destroy');
         });
+    });
+
+    Route::controller(BusScheduleController::class)->prefix('bus-schedules')->group(function () {
+        Route::post('/', 'store');
     });
 });

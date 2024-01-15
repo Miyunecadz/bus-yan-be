@@ -16,4 +16,9 @@ class Bus extends Model
     {
         return $this->belongsTo(Organization::class);
     }
+
+    public function busSchedules()
+    {
+        return $this->hasMany(BusSchedule::class);
+    }
 }

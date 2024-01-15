@@ -21,4 +21,9 @@ class Employee extends Model
     {
         return $this->belongsTo(User::class, 'employee_id');
     }
+
+    public function busSchedules()
+    {
+        return $this->hasMany(BusSchedule::class, 'driver_id');
+    }
 }
