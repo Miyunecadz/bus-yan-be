@@ -16,7 +16,7 @@ class BusController extends Controller
     {
         $user = User::getUserByToken(request()->bearerToken());
 
-        $buses = Bus::where('organization_id', $user->organization->id)->get();
+        $buses = Bus::where('organization_id', $user->operator->organization_id)->get();
         return $this->responseSuccessJson('RETRIEVE_SUCCESS', $buses);
     }
 
@@ -27,7 +27,7 @@ class BusController extends Controller
     {
         $user = User::getUserByToken(request()->bearerToken());
         $bus = Bus::create([
-            'organization_id' => $user->organization->id,
+            'organization_id' => $user->operator->organization_id,
             ...$request->validated()
         ]);
 
@@ -41,7 +41,7 @@ class BusController extends Controller
     {
         $user = User::getUserByToken(request()->bearerToken());
 
-        $bus = Bus::where('organization_id', $user->organization->id)->find($id);
+        $bus = Bus::where('organization_id', $user->operator->organization_id)->find($id);
 
         if (!$bus) {
             return $this->responseErrorJson('NOT_FOUND', [], 404);
@@ -56,14 +56,14 @@ class BusController extends Controller
     public function update(BusRequest $request, string $id)
     {
         $user = User::getUserByToken(request()->bearerToken());
-        $bus = Bus::where('organization_id', $user->organization->id)->find($id);
+        $bus = Bus::where('organization_id', $user->operator->organization_id)->find($id);
 
         if (!$bus) {
             return $this->responseErrorJson('NOT_FOUND', [], 404);
         }
 
         $bus->update([
-            'organization_id' => $user->organization->id,
+            'organization_id' => $user->operator->organization_id,
             ...$request->validated()
         ]);
 
@@ -76,7 +76,7 @@ class BusController extends Controller
     public function destroy(string $id)
     {
         $user = User::getUserByToken(request()->bearerToken());
-        $bus = Bus::where('organization_id', $user->organization->id)->find($id);
+        $bus = Bus::where('organization_id', $user->operator->organization_id)->find($id);
 
         if (!$bus) {
             return $this->responseErrorJson('NOT_FOUND', [], 404);

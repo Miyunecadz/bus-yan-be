@@ -18,7 +18,13 @@ class OperatorController extends Controller
      */
     public function index()
     {
-        $operators = Operator::get();
+        $operators = Operator::when(request()->has('verified'), function ($query) {
+            $query->whereHas('user', function ($query2) {
+                $query2->whereHas('userAccount', function ($query3) {
+                    $query3->where('is_verified', request()->verified);
+                });
+            });
+        })->with('user')->get();
         return $this->responseSuccessJson('SUCCESSFULLY_RETRIEVED', $operators);
     }
 

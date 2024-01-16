@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserAccountEnum;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\Model;
@@ -49,6 +50,14 @@ class Organization extends Model
         $decryptedToken = Crypt::decrypt($token);
         $data = explode('-', $decryptedToken);
 
-        return self::where('owner_user_id', $data[0])->first();
+        if (!$user = User::find($data[0])) {
+            return null;
+        }
+
+        if ($user->userAccount->account_type == UserAccountEnum::BUS_COOPERATIVE->value) {
+            return $user->organization;
+        } else {
+            return self::find($user->operator->organization_id);
+        }
     }
 }

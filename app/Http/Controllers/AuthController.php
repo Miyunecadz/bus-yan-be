@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\TokenGenerator;
+use App\Models\User;
+use App\Models\UserAccount;
 use Illuminate\Http\Request;
+use App\Helpers\TokenGenerator;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Requests\LoginCredentialRequest;
-use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -62,5 +63,23 @@ class AuthController extends Controller
     public function loginWithGoogleCallback()
     {
         return response()->json(['user' => Socialite::driver('google')->stateless()->user()]);
+    }
+
+    public function register(Request $request)
+    {
+        $user = User::create([
+            'email' => $request->email,
+            'phone_number' => $request->contact_number,
+            'display_name' => $request->full_name,
+            'password' => bcrypt('busyan@1234')
+        ]);
+
+        UserAccount::create([
+            'user_id' => $user->id,
+            'account_role' => $request->type,
+            'is_verified' => false
+        ]);
+
+        return $this->responseSuccessJson('SUCCESSFULLY_REGISTERED', $user);
     }
 }

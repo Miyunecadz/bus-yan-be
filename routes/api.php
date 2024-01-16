@@ -86,12 +86,12 @@ Route::middleware('valid.token')->group(function () {
 
     Route::controller(OperatorController::class)->prefix('operators')->group(function () {
         Route::post('/', 'store');
-        Route::middleware('verify.busyan:admin')->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show');
-            Route::put('/{id}', 'update');
-            Route::delete('/{id}', 'destroy');
-        });
+        // Route::middleware('verify.busyan:admin')->group(function () {
+        Route::get('/', 'index');
+        Route::get('/{id}', 'show');
+        Route::put('/{id}', 'update');
+        Route::delete('/{id}', 'destroy');
+        // });
     });
 
     Route::controller(BusScheduleController::class)->prefix('bus-schedules')->group(function () {
